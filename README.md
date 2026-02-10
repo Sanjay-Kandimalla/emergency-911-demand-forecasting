@@ -1,18 +1,20 @@
-# 🚑 Emergency 911 Call Volume Forecasting  
-**Public Safety Demand Forecasting with Time Series Analysis**
+## Emergency 911 Call Volume Forecasting
+
+This project explores how historical emergency call data can be used to understand and forecast daily 911 call demand.
+
+The goal was not to predict exact call counts, but to evaluate whether simple and seasonality-aware time-series models can provide a useful planning signal for public safety operations, especially during periods of unusually high demand.
 
 ---
 
-## Why This Project Matters
+## Problem Context
 
-Emergency response teams don’t get the luxury of reacting late.  
-Police, fire, and medical services need to **anticipate demand** so they can staff appropriately, respond quickly, and avoid being caught off-guard during spikes in emergency calls.
+Emergency response teams need to plan staffing and resources ahead of time, often with limited information about future demand.
 
-This project focuses on forecasting **daily 911 call volume** using historical emergency call data from the Philadelphia metropolitan area. The goal is **not** to predict exact call counts, but to provide a **decision-support signal** that helps public safety teams plan resources more effectively.
+Using historical 911 call data from the Philadelphia metropolitan area, I focused on forecasting daily call volume and understanding how different modeling choices affect forecast stability, particularly during demand spikes.
 
 ---
 
-## Dataset
+## Data
 
 - **Source:** Public 911 emergency call data (Montgomery County, PA – Philadelphia metro area)
 - **Time span:** Multiple years of daily call records
@@ -28,19 +30,18 @@ The raw data reflects real operational conditions, including mixed timestamp for
 
 ---
 
-## Approach & Methodology
+## Approach
 
-### 1. Exploratory Data Analysis (EDA)
-- Aggregated raw call records into daily call volumes
-- Identified strong **weekly seasonality**
-- Observed moderate **monthly patterns**
-- Detected occasional **extreme spikes**, consistent with real emergency events
+### Exploratory Analysis
+- Aggregated raw call records into daily volumes
+- Identified strong weekly seasonality and moderate longer-term patterns
+- Observed occasional extreme spikes consistent with real emergency events
 
-These findings guided model selection and evaluation strategy.
+These observations guided both model selection and evaluation strategy.
 
 ---
 
-### 2. Feature Engineering
+###   Feature Engineering
 To support baseline comparisons and structured analysis:
 - Lag features (1, 7, 14 days)
 - Rolling averages (7-day and 14-day windows)
@@ -50,17 +51,17 @@ Feature engineering was kept transparent and deterministic to ensure reproducibi
 
 ---
 
-### 3. Baseline Model
-A simple but important benchmark was used:
+## Baseline Model
 
-> **Naive persistence baseline:**  
-> Tomorrow’s demand = today’s demand
+A naive persistence baseline was used as an initial benchmark:
 
-Despite its simplicity, this baseline performed surprisingly well due to strong short-term autocorrelation in emergency call volume—highlighting why baselines are essential in time-series forecasting.
+Tomorrow’s demand = today’s demand
+
+Despite its simplicity, this baseline performed well due to strong short-term autocorrelation in emergency call volume. This reinforced the importance of baseline comparisons before relying on more complex models.
 
 ---
 
-### 4. Time Series Modeling
+### Time Series Modeling
 Seasonal ARIMA (SARIMA) models were applied to explicitly capture:
 - Trend
 - Weekly seasonality
@@ -74,7 +75,7 @@ All models were evaluated using **time-based train/test splits** to mirror real-
 
 ---
 
-## Results & Model Comparison
+## Results
 
 | Model | MAE | RMSE |
 |------|----:|----:|
@@ -92,25 +93,14 @@ The comparison plot below shows how each model tracks actual call volume over ti
 - In public safety contexts, **reducing extreme under-forecasting risk** is often more important than minimizing average error.
 
 ---
+## Interpretation & Practical Use
 
-## Business Insights & Operational Impact
+Key patterns observed:
+- Higher call volume on weekdays, especially later in the workweek
+- Elevated demand during late fall and early winter
+- Occasional spikes that simple averages fail to capture
 
-### Observed Patterns
-- **Weekly behavior:** Higher demand on weekdays, peaking toward the end of the workweek
-- **Seasonality:** Elevated call volume during late fall and early winter
-- **Volatility:** Occasional spikes that standard averages fail to capture
-
----
-
-### How This Forecast Would Be Used
-
-This model is not meant to replace dispatcher judgment. Instead, it acts as a **decision-support tool** that could help agencies:
-
-- Establish baseline staffing expectations
-- Flag high-risk periods in advance
-- Trigger contingency staffing plans
-- Pre-position police, fire, and EMS resources
-- Reduce operational risk during demand surges
+In practice, a forecast like this would not replace dispatcher judgment, but could help flag higher-risk periods and support staffing and contingency planning.
 
 ---
 
